@@ -1,0 +1,218 @@
+/* index.css */
+/* Global styles — fonts, resets, edge selection, input styling */
+
+/* Import Inter font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── App Layout ─────────────────────────────────────── */
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ─── Toolbar ─────────────────────────────────────────── */
+.toolbar-wrapper {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  z-index: 10;
+}
+
+.toolbar-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1C2536;
+  letter-spacing: '-0.3px';
+  margin-right: 8px;
+  white-space: nowrap;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 32px;
+  background: #e2e8f0;
+}
+
+.toolbar-nodes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ─── Draggable Node Buttons ──────────────────────────── */
+.draggable-node {
+  cursor: grab;
+  min-width: 80px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #1C2536;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: '0.2px';
+  border: none;
+  transition: background 0.15s ease, transform 0.1s ease;
+  user-select: none;
+  padding: 0 14px;
+}
+
+.draggable-node:hover {
+  background: #2d3f5e;
+  transform: translateY(-1px);
+}
+
+.draggable-node:active {
+  cursor: grabbing;
+  transform: translateY(0px);
+}
+
+/* ─── Canvas ──────────────────────────────────────────── */
+.canvas-wrapper {
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ─── ReactFlow Overrides ─────────────────────────────── */
+
+/* Selected edge turns red so user knows it's selected */
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #ef4444 !important;
+  stroke-width: 2.5px !important;
+}
+
+/* Edge hover effect */
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke: #6366f1 !important;
+  stroke-width: 2px !important;
+  cursor: pointer;
+}
+
+/* Nicer minimap */
+.react-flow__minimap {
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Nicer controls */
+.react-flow__controls {
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.react-flow__controls-button {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.react-flow__controls-button:hover {
+  background: #f1f5f9;
+}
+
+/* Allow dropdowns to overflow outside node bounds */
+.react-flow__node {
+  overflow: visible !important;
+}
+
+.react-flow__node-customInput,
+.react-flow__node-customOutput,
+.react-flow__node-llm,
+.react-flow__node-text,
+.react-flow__node-promptNode,
+.react-flow__node-filterNode,
+.react-flow__node-noteNode,
+.react-flow__node-apiNode,
+.react-flow__node-timerNode {
+  overflow: visible !important;
+}
+
+/* Node selected state — blue outline */
+.react-flow__node.selected > div {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3) !important;
+}
+
+/* ─── Select/Dropdown Styling ─────────────────────────── */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px !important;
+  cursor: pointer;
+}
+
+select:focus {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+/* ─── Input focus styling ─────────────────────────────── */
+input:focus, textarea:focus {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+  outline: none;
+}
+
+/* ─── Submit Button ───────────────────────────────────── */
+.submit-wrapper {
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit-btn {
+  background: #1C2536;
+  color: #ffffff;
+  border: none;
+  padding: 10px 32px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+  letter-spacing: '0.2px';
+}
+
+.submit-btn:hover {
+  background: #2d3f5e;
+  transform: translateY(-1px);
+}
+
+.submit-btn:active {
+  transform: translateY(0px);
+}
