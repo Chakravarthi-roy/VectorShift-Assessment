@@ -10,13 +10,23 @@ import {
 export const useStore = create((set, get) => ({
   nodes: [],
   edges: [],
-  nodeIDs: {},
   getNodeID: (type) => {
-    const newIDs = { ...get().nodeIDs };
-    if (newIDs[type] === undefined) newIDs[type] = 0;
-    newIDs[type] += 1;
-    set({ nodeIDs: newIDs });
-    return `${type}-${newIDs[type]}`;
+    const existingNodes = get().nodes;
+    // Get all numbers currently used by this type
+    const usedNumbers = existingNodes
+      .filter((n) => n.type === type)
+      .map((n) => {
+        const parts = n.id.split('-');
+        return parseInt(parts[parts.length - 1]);
+      })
+      .filter((n) => !isNaN(n));
+
+    // Find the smallest unused number starting from 1
+    let counter = 1;
+    while (usedNumbers.includes(counter)) {
+      counter++;
+    }
+    return `${type}-${counter}`;
   },
   addNode: (node) => {
     set({ nodes: [...get().nodes, node] });
