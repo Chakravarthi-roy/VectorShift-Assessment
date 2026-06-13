@@ -1,7 +1,7 @@
 // toolbar.js
+import { useState } from 'react';
 import { DraggableNode } from './draggableNode';
 
-// SVG path data for each node type
 const icons = {
   customInput: <><polyline points="13 8 13 16"/><path d="M3 12h10M8 8l-5 4 5 4"/><path d="M13 5h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-6"/></>,
   llm: <><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></>,
@@ -14,22 +14,98 @@ const icons = {
   timerNode: <><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>,
 };
 
+// Chevron SVG — points up when expanded, down when collapsed
+const Chevron = ({ up }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+    viewBox="0 0 24 24" fill="none" stroke="#64748b"
+    strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+  >
+    {up
+      ? <polyline points="18 15 12 9 6 15" />   // chevron up
+      : <polyline points="6 9 12 15 18 9" />    // chevron down
+    }
+  </svg>
+);
+
 export const PipelineToolbar = () => {
+  const [expanded, setExpanded] = useState(true);
+
   return (
-    <div className="toolbar-wrapper">
-      <span className="toolbar-title">⚡ VectorShift</span>
-      <div className="toolbar-divider" />
-      <div className="toolbar-nodes">
-        <DraggableNode type='customInput' label='Input' icon={icons.customInput} />
-        <DraggableNode type='llm' label='LLM' icon={icons.llm} />
-        <DraggableNode type='customOutput' label='Output' icon={icons.customOutput} />
-        <DraggableNode type='text' label='Text' icon={icons.text} />
-        <DraggableNode type='promptNode' label='Prompt' icon={icons.promptNode} />
-        <DraggableNode type='filterNode' label='Filter' icon={icons.filterNode} />
-        <DraggableNode type='noteNode' label='Note' icon={icons.noteNode} />
-        <DraggableNode type='apiNode' label='API Call' icon={icons.apiNode} />
-        <DraggableNode type='timerNode' label='Timer' icon={icons.timerNode} />
+    <div style={wrapperStyle}>
+      {/* Main toolbar — slides up/down */}
+      <div style={{
+        ...toolbarStyle,
+        maxHeight: expanded ? '80px' : '0px',
+        opacity: expanded ? 1 : 0,
+        paddingTop: expanded ? '12px' : '0',
+        paddingBottom: expanded ? '12px' : '0',
+        overflow: 'hidden',
+      }}>
+        <span className="toolbar-title">⚡ VectorShift</span>
+        <div className="toolbar-divider" />
+        <div className="toolbar-nodes">
+          <DraggableNode type='customInput' label='Input' icon={icons.customInput} />
+          <DraggableNode type='llm' label='LLM' icon={icons.llm} />
+          <DraggableNode type='customOutput' label='Output' icon={icons.customOutput} />
+          <DraggableNode type='text' label='Text' icon={icons.text} />
+          <DraggableNode type='promptNode' label='Prompt' icon={icons.promptNode} />
+          <DraggableNode type='filterNode' label='Filter' icon={icons.filterNode} />
+          <DraggableNode type='noteNode' label='Note' icon={icons.noteNode} />
+          <DraggableNode type='apiNode' label='API Call' icon={icons.apiNode} />
+          <DraggableNode type='timerNode' label='Timer' icon={icons.timerNode} />
+        </div>
+      </div>
+
+      {/* Chevron toggle button — small semicircle */}
+      <div style={chevronWrapperStyle}>
+        <div style={chevronBtnStyle} onClick={() => setExpanded(!expanded)}>
+          <Chevron up={expanded} />
+        </div>
       </div>
     </div>
   );
+};
+
+const wrapperStyle = {
+  background: '#ffffff',
+  borderBottom: 'none',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+  zIndex: 10,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'stretch',
+};
+
+const toolbarStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '16px',
+  padding: '12px 20px',
+  borderBottom: '1px solid #e2e8f0',
+  transition: 'max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease',
+};
+
+const chevronWrapperStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  position: 'relative',
+  height: '0px',
+};
+
+const chevronBtnStyle = {
+  position: 'absolute',
+  top: '-1px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '72px',
+  height: '28px',
+  background: '#ffffff',
+  border: '1px solid #e2e8f0',
+  borderTop: 'none',
+  borderRadius: '0 0 36px 36px',
+  cursor: 'pointer',
+  boxShadow: '0 2px 4px rgba(0,0,0,0.06)',
+  zIndex: 11,
 };
