@@ -4,7 +4,7 @@
 import { useState, useRef, useCallback } from 'react';
 import ReactFlow, {
   Controls, Background, MiniMap,
-  useReactFlow, ReactFlowProvider,
+  ReactFlowProvider,
 } from 'reactflow';
 import { useStore } from './store';
 import { shallow } from 'zustand/shallow';
@@ -46,10 +46,28 @@ const selector = (state) => ({
   clearCanvas: state.clearCanvas,
 });
 
-// Toast notification component
-const Toast = ({ message, onClose }) => (
-  <div style={toastStyle}>
-    🔒 {message}
+// Toast notification
+const Toast = ({ message }) => (
+  <div style={toastStyle}>🔒 {message}</div>
+);
+
+// Clear Canvas confirmation modal
+const ClearModal = ({ onConfirm, onCancel }) => (
+  <div style={overlayStyle}>
+    <div style={modalStyle}>
+      <div style={modalHeaderStyle}>
+        <span style={{ fontSize: '18px', fontWeight: '700', color: '#1e293b' }}>
+          🗑️ Clear Canvas?
+        </span>
+      </div>
+      <p style={modalBodyStyle}>
+        This will remove all nodes and edges from the canvas. This action cannot be undone.
+      </p>
+      <div style={modalFooterStyle}>
+        <button style={cancelBtnStyle} onClick={onCancel}>Cancel</button>
+        <button style={confirmBtnStyle} onClick={onConfirm}>Clear</button>
+      </div>
+    </div>
   </div>
 );
 
@@ -58,6 +76,7 @@ const Flow = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [isLocked, setIsLocked] = useState(false);
   const [toast, setToast] = useState(null);
+  const [showClearModal, setShowClearModal] = useState(false);
 
   const {
     nodes, edges, getNodeID, addNode,
@@ -65,7 +84,6 @@ const Flow = () => {
     clearCanvas,
   } = useStore(selector, shallow);
 
-  // Show toast for 2.5 seconds
   const showToast = (msg) => {
     setToast(msg);
     setTimeout(() => setToast(null), 2500);
@@ -95,13 +113,9 @@ const Flow = () => {
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
-  // Handle keyboard delete — blocked when locked
   const onKeyDown = useCallback((event) => {
     if (event.key === 'Delete' || event.key === 'Backspace') {
-      if (isLocked) {
-        showToast('Pipeline is locked. Unlock to make changes.');
-        return;
-      }
+      if (isLocked) { showToast('Pipeline is locked. Unlock to make changes.'); return; }
       const selectedEdges = edges.filter((e) => e.selected);
       if (selectedEdges.length > 0) {
         onEdgesChange(selectedEdges.map((e) => ({ id: e.id, type: 'remove' })));
@@ -109,7 +123,6 @@ const Flow = () => {
     }
   }, [edges, onEdgesChange, isLocked]);
 
-  // Block node dragging when locked
   const handleNodesChange = useCallback((changes) => {
     if (isLocked) {
       const nonMoveChanges = changes.filter((c) => c.type !== 'position');
@@ -122,7 +135,6 @@ const Flow = () => {
     onNodesChange(changes);
   }, [onNodesChange, isLocked]);
 
-  // Block new connections when locked
   const handleConnect = useCallback((connection) => {
     if (isLocked) { showToast('Pipeline is locked. Unlock to make changes.'); return; }
     onConnect(connection);
@@ -154,15 +166,13 @@ const Flow = () => {
         fitView
       >
         <Background color="#cbd5e1" gap={gridSize} variant="dots" />
-        <Controls
-          onInteractiveChange={(isInteractive) => setIsLocked(!isInteractive)}
-        >
-          {/* Clear Canvas Button — filled dustbin SVG */}
+        <Controls onInteractiveChange={(isInteractive) => setIsLocked(!isInteractive)}>
+          {/* Clear Canvas Button */}
           <button
             title="Clear canvas"
             onClick={() => {
               if (isLocked) { showToast('Pipeline is locked. Unlock to make changes.'); return; }
-              if (window.confirm('Clear all nodes and edges?')) clearCanvas();
+              setShowClearModal(true);
             }}
             style={controlBtnStyle}
           >
@@ -174,13 +184,20 @@ const Flow = () => {
         <MiniMap nodeColor="#1C2536" maskColor="rgba(248,250,252,0.7)" />
       </ReactFlow>
 
-      {/* Toast notification */}
+      {/* Toast */}
       {toast && <Toast message={toast} />}
+
+      {/* Clear Canvas Modal */}
+      {showClearModal && (
+        <ClearModal
+          onConfirm={() => { clearCanvas(); setShowClearModal(false); }}
+          onCancel={() => setShowClearModal(false)}
+        />
+      )}
     </div>
   );
 };
 
-// Wrap with ReactFlowProvider so useReactFlow works
 export const PipelineUI = () => (
   <ReactFlowProvider>
     <Flow />
@@ -195,7 +212,6 @@ const controlBtnStyle = {
   borderBottom: '1px solid #e2e8f0',
   padding: '6px',
   cursor: 'pointer',
-  fontSize: '14px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -217,4 +233,69 @@ const toastStyle = {
   zIndex: 999,
   whiteSpace: 'nowrap',
   pointerEvents: 'none',
+};
+
+const overlayStyle = {
+  position: 'absolute',
+  top: 0, left: 0, right: 0, bottom: 0,
+  background: 'rgba(0,0,0,0.4)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 1000,
+  backdropFilter: 'blur(2px)',
+};
+
+const modalStyle = {
+  background: '#ffffff',
+  borderRadius: '16px',
+  width: '340px',
+  boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
+  overflow: 'hidden',
+  fontFamily: 'Inter, sans-serif',
+};
+
+const modalHeaderStyle = {
+  padding: '20px 20px 12px',
+  borderBottom: '1px solid #e2e8f0',
+};
+
+const modalBodyStyle = {
+  padding: '16px 20px',
+  fontSize: '13px',
+  color: '#64748b',
+  lineHeight: '1.6',
+  margin: 0,
+};
+
+const modalFooterStyle = {
+  display: 'flex',
+  gap: '10px',
+  padding: '12px 20px 20px',
+};
+
+const cancelBtnStyle = {
+  flex: 1,
+  padding: '9px',
+  borderRadius: '8px',
+  border: '1px solid #e2e8f0',
+  background: '#f8fafc',
+  fontSize: '13px',
+  fontWeight: '600',
+  cursor: 'pointer',
+  fontFamily: 'Inter, sans-serif',
+  color: '#64748b',
+};
+
+const confirmBtnStyle = {
+  flex: 1,
+  padding: '9px',
+  borderRadius: '8px',
+  border: 'none',
+  background: '#ef4444',
+  color: '#ffffff',
+  fontSize: '13px',
+  fontWeight: '600',
+  cursor: 'pointer',
+  fontFamily: 'Inter, sans-serif',
 };

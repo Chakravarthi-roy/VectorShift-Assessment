@@ -1,21 +1,34 @@
 // toolbar.js
 import { DraggableNode } from './draggableNode';
 
+// SVG path data for each node type
+const icons = {
+  customInput: <><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12h6m-3-3 3 3-3 3"/></>,
+  llm: <><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></>,
+  customOutput: <><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8l4 4-4 4M8 12h8"/></>,
+  text: <><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></>,
+  promptNode: <><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></>,
+  filterNode: <><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></>,
+  noteNode: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></>,
+  apiNode: <><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></>,
+  timerNode: <><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>,
+};
+
 export const PipelineToolbar = () => {
   return (
     <div className="toolbar-wrapper">
       <span className="toolbar-title">⚡ VectorShift</span>
       <div className="toolbar-divider" />
       <div className="toolbar-nodes">
-        <DraggableNode type='customInput' label='Input' />
-        <DraggableNode type='llm' label='LLM' />
-        <DraggableNode type='customOutput' label='Output' />
-        <DraggableNode type='text' label='Text' />
-        <DraggableNode type='promptNode' label='Prompt' />
-        <DraggableNode type='filterNode' label='Filter' />
-        <DraggableNode type='noteNode' label='Note' />
-        <DraggableNode type='apiNode' label='API Call' />
-        <DraggableNode type='timerNode' label='Timer' />
+        <DraggableNode type='customInput' label='Input' icon={icons.customInput} />
+        <DraggableNode type='llm' label='LLM' icon={icons.llm} />
+        <DraggableNode type='customOutput' label='Output' icon={icons.customOutput} />
+        <DraggableNode type='text' label='Text' icon={icons.text} />
+        <DraggableNode type='promptNode' label='Prompt' icon={icons.promptNode} />
+        <DraggableNode type='filterNode' label='Filter' icon={icons.filterNode} />
+        <DraggableNode type='noteNode' label='Note' icon={icons.noteNode} />
+        <DraggableNode type='apiNode' label='API Call' icon={icons.apiNode} />
+        <DraggableNode type='timerNode' label='Timer' icon={icons.timerNode} />
       </div>
     </div>
   );
