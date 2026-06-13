@@ -11,7 +11,7 @@ export const LLMNode = ({ id, data }) => {
   ];
 
   return (
-    <BaseNode id={id} title="LLM" icon={icon} description="Connect prompts to get a response from a language model." handles={handles}>
+    <BaseNode id={id} title="LLM" icon={icon} description="Connect prompts to get a response from a language model." handles={handles} width={240}>
       <div style={rowStyle}>
         <span style={labelStyle}>System</span>
         <span style={labelStyle}>Prompt</span>

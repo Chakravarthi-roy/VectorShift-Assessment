@@ -138,7 +138,14 @@ body {
   background: #f1f5f9;
 }
 
-/* Allow dropdowns to overflow outside node bounds */
+/* Delete node tooltip */
+.delete-btn-wrapper:hover .delete-tooltip {
+  opacity: 1 !important;
+}
+
+.delete-btn:hover {
+  background: rgba(255,255,255,0.25) !important;
+}
 .react-flow__node {
   overflow: visible !important;
 }

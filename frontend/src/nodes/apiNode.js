@@ -25,7 +25,7 @@ export const APINode = ({ id, data }) => {
   ];
 
   return (
-    <BaseNode id={id} title="API Call" icon={icon} description="Make an HTTP request to an external API." handles={handles} width={230}>
+    <BaseNode id={id} title="API Call" icon={icon} description="Make an HTTP request to an external API." handles={handles} width={260}>
       <label style={labelStyle}>
         URL
         <input style={inputStyle} type="text" value={url} placeholder="https://api.example.com/data"

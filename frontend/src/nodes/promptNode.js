@@ -23,7 +23,7 @@ export const PromptNode = ({ id, data }) => {
   ];
 
   return (
-    <BaseNode id={id} title="Prompt" icon={icon} description="Write a prompt template with a role for the LLM." handles={handles}>
+    <BaseNode id={id} title="Prompt" icon={icon} description="Write a prompt template with a role for the LLM." handles={handles} width={260}>
       <label style={labelStyle}>
         Role
         <CustomSelect value={role} options={roleOptions}

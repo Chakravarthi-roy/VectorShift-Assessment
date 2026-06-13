@@ -39,6 +39,7 @@ export const BaseNode = ({
   return (
     <div style={{
       width,
+      maxWidth: width,
       minHeight,
       maxHeight,
       background: '#ffffff',
@@ -76,20 +77,25 @@ export const BaseNode = ({
           </span>
         </div>
 
-        {/* Close button */}
-        <button
-          onClick={handleDelete}
-          title="Remove node"
-          style={closeBtnStyle}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
-            viewBox="0 0 24 24" fill="none" stroke="#ffffff"
-            strokeWidth="2.5" strokeLinecap="round"
+        {/* Close button with tooltip */}
+        <div style={{ position: 'relative' }} className="delete-btn-wrapper">
+          <button
+            onClick={handleDelete}
+            style={closeBtnStyle}
+            className="delete-btn"
           >
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-        </button>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+              viewBox="0 0 24 24" fill="none" stroke="#ffffff"
+              strokeWidth="2.5" strokeLinecap="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+          <div style={tooltipStyle} className="delete-tooltip">
+            Delete node
+          </div>
+        </div>
       </div>
 
       {/* Description */}
@@ -133,6 +139,26 @@ export const BaseNode = ({
       ))}
     </div>
   );
+};
+
+const tooltipStyle = {
+  position: 'absolute',
+  top: 'calc(100% + 6px)',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  background: '#ffffff',
+  color: '#1C2536',
+  fontSize: '11px',
+  fontWeight: '500',
+  padding: '4px 8px',
+  borderRadius: '6px',
+  whiteSpace: 'nowrap',
+  pointerEvents: 'none',
+  opacity: 0,
+  transition: 'opacity 0.15s ease',
+  zIndex: 9999,
+  boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+  border: '1px solid #e2e8f0',
 };
 
 const closeBtnStyle = {
