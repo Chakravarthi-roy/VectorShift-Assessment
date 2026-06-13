@@ -1,49 +1,110 @@
 // BaseNode.js
-import { Handle } from 'reactflow';
+// Shared template for all nodes
+// Props: id, title, icon, description, handles, children, width, minHeight, headerColor
 
-export const BaseNode = ({ 
-  id, 
-  title, 
-  handles = [], 
-  children, 
-  width = 200, 
+import { Handle } from 'reactflow';
+import { useStore } from './store';
+
+export const BaseNode = ({
+  id,
+  title,
+  icon,
+  description,
+  handles = [],
+  children,
+  width = 220,
   minHeight = 80,
   maxHeight = 'none',
   headerColor = '#1C2536',
 }) => {
+  const onNodesChange = useStore((state) => state.onNodesChange);
+
+  const handleDelete = () => {
+    onNodesChange([{ id, type: 'remove' }]);
+  };
+
+  // Get node label e.g. "customInput-1" → "input_1"
+  const nodeLabel = id
+    .replace('customInput-', 'input_')
+    .replace('customOutput-', 'output_')
+    .replace('Node-', '_')
+    .replace('llm-', 'llm_')
+    .replace('text-', 'text_')
+    .replace('promptNode-', 'prompt_')
+    .replace('filterNode-', 'filter_')
+    .replace('noteNode-', 'note_')
+    .replace('apiNode-', 'api_')
+    .replace('timerNode-', 'timer_');
+
   return (
     <div style={{
-      width: width,
-      minHeight: minHeight,
-      maxHeight: maxHeight,
+      width,
+      minHeight,
+      maxHeight,
       background: '#ffffff',
       border: '1px solid #e2e8f0',
-      borderRadius: '10px',
-      boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)',
+      borderRadius: '12px',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
       fontFamily: 'Inter, sans-serif',
       fontSize: '13px',
       boxSizing: 'border-box',
-      // No overflow here — let children (dropdowns) escape freely
     }}>
 
-      {/* Header — rounded top corners only */}
+      {/* Header */}
       <div style={{
         background: headerColor,
         color: '#ffffff',
-        padding: '8px 12px',
-        fontWeight: '600',
-        fontSize: '13px',
-        letterSpacing: '0.3px',
-        width: '100%',
-        boxSizing: 'border-box',
-        borderRadius: '9px 9px 0 0',
+        padding: '8px 10px',
+        borderRadius: '11px 11px 0 0',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '6px',
       }}>
-        {title}
+        {/* Left side — icon + title */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          {icon && (
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+              viewBox="0 0 24 24" fill="none" stroke="#ffffff"
+              strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+            >
+              {icon}
+            </svg>
+          )}
+          <span style={{ fontWeight: '600', fontSize: '13px', letterSpacing: '0.2px' }}>
+            {title}
+          </span>
+        </div>
+
+        {/* Close button */}
+        <button
+          onClick={handleDelete}
+          title="Remove node"
+          style={closeBtnStyle}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+            viewBox="0 0 24 24" fill="none" stroke="#ffffff"
+            strokeWidth="2.5" strokeLinecap="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      {/* Description */}
+      {description && (
+        <div style={descriptionStyle}>{description}</div>
+      )}
+
+      {/* Node ID badge */}
+      <div style={badgeWrapperStyle}>
+        <span style={badgeStyle}>{nodeLabel}</span>
       </div>
 
       {/* Body */}
       <div style={{
-        padding: '10px 12px',
+        padding: '8px 12px 12px',
         display: 'flex',
         flexDirection: 'column',
         gap: '8px',
@@ -72,4 +133,39 @@ export const BaseNode = ({
       ))}
     </div>
   );
+};
+
+const closeBtnStyle = {
+  background: 'rgba(255,255,255,0.15)',
+  border: 'none',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  padding: '3px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'background 0.15s ease',
+  flexShrink: 0,
+};
+
+const descriptionStyle = {
+  fontSize: '11px',
+  color: '#94a3b8',
+  padding: '6px 12px 0',
+  lineHeight: '1.5',
+};
+
+const badgeWrapperStyle = {
+  padding: '6px 12px 0',
+};
+
+const badgeStyle = {
+  display: 'inline-block',
+  fontSize: '11px',
+  color: '#6366f1',
+  background: '#f5f3ff',
+  border: '1px solid #ddd6fe',
+  borderRadius: '20px',
+  padding: '2px 10px',
+  fontWeight: '500',
 };

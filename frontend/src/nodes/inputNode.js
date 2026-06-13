@@ -1,9 +1,10 @@
-// inputNode.js
 import { useState } from 'react';
 import { Position } from 'reactflow';
 import { BaseNode } from '../BaseNode';
 import { CustomSelect } from '../customSelect';
 import { useStore } from '../store';
+
+const icon = <><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12h6m-3-3 3 3-3 3"/></>;
 
 export const InputNode = ({ id, data }) => {
   const [currName, setCurrName] = useState(data?.inputName || id.replace('customInput-', 'input_'));
@@ -20,7 +21,7 @@ export const InputNode = ({ id, data }) => {
   ];
 
   return (
-    <BaseNode id={id} title="Input" handles={handles}>
+    <BaseNode id={id} title="Input" icon={icon} description="Accepts text or file input into the pipeline." handles={handles}>
       <label style={labelStyle}>
         Name
         <input style={inputStyle} type="text" value={currName}
@@ -29,9 +30,7 @@ export const InputNode = ({ id, data }) => {
       </label>
       <label style={labelStyle}>
         Type
-        <CustomSelect
-          value={inputType}
-          options={typeOptions}
+        <CustomSelect value={inputType} options={typeOptions}
           onChange={(e) => { setInputType(e.target.value); updateNodeField(id, 'inputType', e.target.value); }}
         />
       </label>

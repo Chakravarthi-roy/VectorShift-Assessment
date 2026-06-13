@@ -1,9 +1,10 @@
-// promptNode.js
 import { useState } from 'react';
 import { Position } from 'reactflow';
 import { BaseNode } from '../BaseNode';
 import { CustomSelect } from '../customSelect';
 import { useStore } from '../store';
+
+const icon = <><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></>;
 
 export const PromptNode = ({ id, data }) => {
   const [prompt, setPrompt] = useState(data?.prompt || '');
@@ -22,12 +23,10 @@ export const PromptNode = ({ id, data }) => {
   ];
 
   return (
-    <BaseNode id={id} title="Prompt" handles={handles}>
+    <BaseNode id={id} title="Prompt" icon={icon} description="Write a prompt template with a role for the LLM." handles={handles}>
       <label style={labelStyle}>
         Role
-        <CustomSelect
-          value={role}
-          options={roleOptions}
+        <CustomSelect value={role} options={roleOptions}
           onChange={(e) => { setRole(e.target.value); updateNodeField(id, 'role', e.target.value); }}
         />
       </label>

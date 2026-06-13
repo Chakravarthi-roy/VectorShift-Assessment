@@ -1,9 +1,10 @@
-// filterNode.js
 import { useState } from 'react';
 import { Position } from 'reactflow';
 import { BaseNode } from '../BaseNode';
 import { CustomSelect } from '../customSelect';
 import { useStore } from '../store';
+
+const icon = <><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></>;
 
 export const FilterNode = ({ id, data }) => {
   const [condition, setCondition] = useState(data?.condition || '');
@@ -12,8 +13,8 @@ export const FilterNode = ({ id, data }) => {
 
   const handles = [
     { type: 'target', position: Position.Left, id: `${id}-input` },
-    { type: 'source', position: Position.Right, id: `${id}-passed`, style: { top: '35%' } },
-    { type: 'source', position: Position.Right, id: `${id}-failed`, style: { top: '65%' } },
+    { type: 'source', position: Position.Right, id: `${id}-passed`, style: { top: '38%' } },
+    { type: 'source', position: Position.Right, id: `${id}-failed`, style: { top: '62%' } },
   ];
 
   const operatorOptions = [
@@ -26,12 +27,10 @@ export const FilterNode = ({ id, data }) => {
   ];
 
   return (
-    <BaseNode id={id} title="Filter" handles={handles}>
+    <BaseNode id={id} title="Filter" icon={icon} description="Filter data based on a condition." handles={handles}>
       <label style={labelStyle}>
         Operator
-        <CustomSelect
-          value={operator}
-          options={operatorOptions}
+        <CustomSelect value={operator} options={operatorOptions}
           onChange={(e) => { setOperator(e.target.value); updateNodeField(id, 'operator', e.target.value); }}
         />
       </label>

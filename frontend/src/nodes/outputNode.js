@@ -1,9 +1,10 @@
-// outputNode.js
 import { useState } from 'react';
 import { Position } from 'reactflow';
 import { BaseNode } from '../BaseNode';
 import { CustomSelect } from '../customSelect';
 import { useStore } from '../store';
+
+const icon = <><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8l4 4-4 4M8 12h8"/></>;
 
 export const OutputNode = ({ id, data }) => {
   const [currName, setCurrName] = useState(data?.outputName || id.replace('customOutput-', 'output_'));
@@ -20,7 +21,7 @@ export const OutputNode = ({ id, data }) => {
   ];
 
   return (
-    <BaseNode id={id} title="Output" handles={handles}>
+    <BaseNode id={id} title="Output" icon={icon} description="Displays the final result of the pipeline." handles={handles}>
       <label style={labelStyle}>
         Name
         <input style={inputStyle} type="text" value={currName}
@@ -29,9 +30,7 @@ export const OutputNode = ({ id, data }) => {
       </label>
       <label style={labelStyle}>
         Type
-        <CustomSelect
-          value={outputType}
-          options={typeOptions}
+        <CustomSelect value={outputType} options={typeOptions}
           onChange={(e) => { setOutputType(e.target.value); updateNodeField(id, 'outputType', e.target.value); }}
         />
       </label>

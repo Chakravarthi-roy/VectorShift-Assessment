@@ -1,9 +1,10 @@
-// timerNode.js
 import { useState } from 'react';
 import { Position } from 'reactflow';
 import { BaseNode } from '../BaseNode';
 import { CustomSelect } from '../customSelect';
 import { useStore } from '../store';
+
+const icon = <><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>;
 
 export const TimerNode = ({ id, data }) => {
   const [duration, setDuration] = useState(data?.duration || '1');
@@ -23,7 +24,7 @@ export const TimerNode = ({ id, data }) => {
   ];
 
   return (
-    <BaseNode id={id} title="⏱ Timer" handles={handles} headerColor="#0ea5e9">
+    <BaseNode id={id} title="Timer" icon={icon} description="Add a delay before the next step in the pipeline." handles={handles} headerColor="#0ea5e9">
       <label style={labelStyle}>
         Duration
         <input style={inputStyle} type="number" min="1" value={duration}
@@ -32,9 +33,7 @@ export const TimerNode = ({ id, data }) => {
       </label>
       <label style={labelStyle}>
         Unit
-        <CustomSelect
-          value={unit}
-          options={unitOptions}
+        <CustomSelect value={unit} options={unitOptions}
           onChange={(e) => { setUnit(e.target.value); updateNodeField(id, 'unit', e.target.value); }}
         />
       </label>

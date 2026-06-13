@@ -1,9 +1,10 @@
-// apiNode.js
 import { useState } from 'react';
 import { Position } from 'reactflow';
 import { BaseNode } from '../BaseNode';
 import { CustomSelect } from '../customSelect';
 import { useStore } from '../store';
+
+const icon = <><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></>;
 
 export const APINode = ({ id, data }) => {
   const [url, setUrl] = useState(data?.url || '');
@@ -11,8 +12,8 @@ export const APINode = ({ id, data }) => {
   const updateNodeField = useStore((state) => state.updateNodeField);
 
   const handles = [
-    { type: 'target', position: Position.Left, id: `${id}-body`, style: { top: '35%' } },
-    { type: 'target', position: Position.Left, id: `${id}-headers`, style: { top: '65%' } },
+    { type: 'target', position: Position.Left, id: `${id}-body`, style: { top: '38%' } },
+    { type: 'target', position: Position.Left, id: `${id}-headers`, style: { top: '62%' } },
     { type: 'source', position: Position.Right, id: `${id}-response` },
   ];
 
@@ -24,7 +25,7 @@ export const APINode = ({ id, data }) => {
   ];
 
   return (
-    <BaseNode id={id} title="API Call" handles={handles} width={220}>
+    <BaseNode id={id} title="API Call" icon={icon} description="Make an HTTP request to an external API." handles={handles} width={230}>
       <label style={labelStyle}>
         URL
         <input style={inputStyle} type="text" value={url} placeholder="https://api.example.com/data"
@@ -33,9 +34,7 @@ export const APINode = ({ id, data }) => {
       </label>
       <label style={labelStyle}>
         Method
-        <CustomSelect
-          value={method}
-          options={methodOptions}
+        <CustomSelect value={method} options={methodOptions}
           onChange={(e) => { setMethod(e.target.value); updateNodeField(id, 'method', e.target.value); }}
         />
       </label>
