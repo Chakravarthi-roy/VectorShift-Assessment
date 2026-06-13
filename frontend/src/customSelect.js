@@ -13,8 +13,9 @@ export const CustomSelect = ({ value, onChange, options }) => {
         setOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    // Use capture: true to catch clicks even inside ReactFlow canvas
+    document.addEventListener('mousedown', handleClickOutside, true);
+    return () => document.removeEventListener('mousedown', handleClickOutside, true);
   }, []);
 
   const selected = options.find((o) => o.value === value) || options[0];
