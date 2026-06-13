@@ -3,9 +3,9 @@ import { DraggableNode } from './draggableNode';
 
 // SVG path data for each node type
 const icons = {
-  customInput: <><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12h6m-3-3 3 3-3 3"/></>,
+  customInput: <><polyline points="13 8 13 16"/><path d="M3 12h10M8 8l-5 4 5 4"/><path d="M13 5h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-6"/></>,
   llm: <><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></>,
-  customOutput: <><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8l4 4-4 4M8 12h8"/></>,
+  customOutput: <><path d="M11 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6"/><polyline points="11 8 11 16"/><path d="M21 12H11m5-4 5 4-5 4"/></>,
   text: <><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></>,
   promptNode: <><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></>,
   filterNode: <><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></>,

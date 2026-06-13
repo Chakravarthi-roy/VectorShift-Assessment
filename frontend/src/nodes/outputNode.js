@@ -4,7 +4,7 @@ import { BaseNode } from '../BaseNode';
 import { CustomSelect } from '../customSelect';
 import { useStore } from '../store';
 
-const icon = <><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8l4 4-4 4M8 12h8"/></>;
+const icon = <><path d="M11 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6"/><polyline points="11 8 11 16"/><path d="M21 12H11m5-4 5 4-5 4"/></>;
 
 export const OutputNode = ({ id, data }) => {
   const [currName, setCurrName] = useState(data?.outputName || id.replace('customOutput-', 'output_'));

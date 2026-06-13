@@ -4,7 +4,7 @@ import { BaseNode } from '../BaseNode';
 import { CustomSelect } from '../customSelect';
 import { useStore } from '../store';
 
-const icon = <><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12h6m-3-3 3 3-3 3"/></>;
+const icon = <><polyline points="13 8 13 16"/><path d="M3 12h10M8 8l-5 4 5 4"/><path d="M13 5h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-6"/></>;
 
 export const InputNode = ({ id, data }) => {
   const [currName, setCurrName] = useState(data?.inputName || id.replace('customInput-', 'input_'));
