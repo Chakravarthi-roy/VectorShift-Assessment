@@ -163,23 +163,25 @@ const Flow = () => {
         connectionLineType='smoothstep'
         deleteKeyCode={isLocked ? null : ['Delete', 'Backspace']}
         nodesDraggable={!isLocked}
-        fitView
+        defaultViewport={{ x: 0, y: 0, zoom: 1 }}
       >
         <Background color="#cbd5e1" gap={gridSize} variant="dots" />
         <Controls onInteractiveChange={(isInteractive) => setIsLocked(!isInteractive)}>
           {/* Clear Canvas Button */}
-          <button
-            title="Clear canvas"
-            onClick={() => {
-              if (isLocked) { showToast('Pipeline is locked. Unlock to make changes.'); return; }
-              setShowClearModal(true);
-            }}
-            style={controlBtnStyle}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M3 6h18v2H3V6zm2 3h14l-1.5 12H6.5L5 9zm5 2v8h1v-8h-1zm3 0v8h1v-8h-1zM9 4h6V2H9v2z"/>
-            </svg>
-          </button>
+          <div className="clear-btn-wrapper">
+            <button
+              onClick={() => {
+                if (isLocked) { showToast('Pipeline is locked. Unlock to make changes.'); return; }
+                setShowClearModal(true);
+              }}
+              style={controlBtnStyle}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 6h18v2H3V6zm2 3h14l-1.5 12H6.5L5 9zm5 2v8h1v-8h-1zm3 0v8h1v-8h-1zM9 4h6V2H9v2z"/>
+              </svg>
+            </button>
+            <div className="clear-btn-tooltip">Clear canvas</div>
+          </div>
         </Controls>
         <MiniMap nodeColor="#1C2536" maskColor="rgba(248,250,252,0.7)" />
       </ReactFlow>
