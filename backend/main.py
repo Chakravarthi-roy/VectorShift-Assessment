@@ -1,7 +1,3 @@
-# main.py
-# FastAPI backend for VectorShift pipeline parser
-# Receives nodes and edges, counts them, and checks if they form a DAG
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -9,7 +5,7 @@ from typing import List, Dict, Any
 
 app = FastAPI()
 
-# ─── CORS ────────────────────────────────────────────────────────────────────
+# CORS
 # Allow the React frontend (localhost:3000) to talk to this backend
 app.add_middleware(
     CORSMiddleware,
@@ -19,7 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ─── Models ──────────────────────────────────────────────────────────────────
+# Models
 class Node(BaseModel):
     id: str
     type: str
@@ -34,7 +30,7 @@ class Pipeline(BaseModel):
     nodes: List[Node]
     edges: List[Edge]
 
-# ─── DAG Check ───────────────────────────────────────────────────────────────
+# DAG Check
 def is_dag(nodes: List[Node], edges: List[Edge]) -> bool:
     """
     Check if the pipeline forms a Directed Acyclic Graph (DAG).
@@ -76,7 +72,7 @@ def is_dag(nodes: List[Node], edges: List[Edge]) -> bool:
 
     return True  # no cycles found → is a DAG
 
-# ─── Routes ──────────────────────────────────────────────────────────────────
+# Routes
 @app.get('/')
 def read_root():
     return {'Ping': 'Pong'}
@@ -85,10 +81,11 @@ def read_root():
 def parse_pipeline(pipeline: Pipeline):
     num_nodes = len(pipeline.nodes)
     num_edges = len(pipeline.edges)
-    dag = is_dag(pipeline.nodes, pipeline.edges)
-
+    is_acyclic = is_dag(pipeline.nodes, pipeline.edges)
+    
     return {
+        'status': 'success',
         'num_nodes': num_nodes,
         'num_edges': num_edges,
-        'is_dag': dag,
+        'is_dag': is_acyclic
     }
