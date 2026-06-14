@@ -18,6 +18,9 @@ export const OutputNode = ({ id, data }) => {
   const typeOptions = [
     { value: 'Text', label: 'Text' },
     { value: 'Image', label: 'Image' },
+    { value: 'Number', label: 'Number' },
+    { value: 'File', label: 'File' },
+    { value: 'JSON', label: 'JSON' },
   ];
 
   return (

@@ -5,30 +5,32 @@ import { useState, useRef, useEffect } from 'react';
 
 export const CustomSelect = ({ value, onChange, options }) => {
   const [open, setOpen] = useState(false);
+  const [hoveredValue, setHoveredValue] = useState(null);
   const ref = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
+    const handleOutside = (e) => {
       if (ref.current && !ref.current.contains(e.target)) {
         setOpen(false);
+        setHoveredValue(null);
       }
     };
-    // Use capture: true to catch clicks even inside ReactFlow canvas
-    document.addEventListener('mousedown', handleClickOutside, true);
-    return () => document.removeEventListener('mousedown', handleClickOutside, true);
+    document.addEventListener('mousedown', handleOutside, true);
+    return () => document.removeEventListener('mousedown', handleOutside, true);
   }, []);
 
   const selected = options.find((o) => o.value === value) || options[0];
 
   return (
     <div ref={ref} style={wrapperStyle}>
+      {/* Trigger */}
       <div
         style={{
           ...triggerStyle,
           borderColor: open ? '#6366f1' : '#e2e8f0',
           boxShadow: open ? '0 0 0 2px rgba(99,102,241,0.3)' : 'none',
         }}
-        onClick={() => setOpen(!open)}
+        onClick={() => setOpen((prev) => !prev)}
       >
         <span style={{ color: selected.color || '#1e293b' }}>{selected.label}</span>
         <svg
@@ -40,75 +42,40 @@ export const CustomSelect = ({ value, onChange, options }) => {
         </svg>
       </div>
 
+      {/* Dropdown */}
       {open && (
         <div style={dropdownStyle}>
-          {options.map((option) => (
-            <div
-              key={option.value}
-              style={{
-                ...optionStyle,
-                background: option.value === value ? '#f5f3ff' : '#ffffff',
-                color: option.color || '#1e293b',
-                fontWeight: option.value === value ? '600' : '400',
-              }}
-              onMouseDown={(e) => {
-                e.preventDefault();
-                onChange({ target: { value: option.value } });
-                setOpen(false);
-              }}
-            >
-              {option.value === value && (
-                <span style={{ color: '#6366f1', marginRight: '6px' }}>✓</span>
-              )}
-              {option.label}
-            </div>
-          ))}
+          {options.map((option) => {
+            const isSelected = option.value === value;
+            const isHovered = option.value === hoveredValue;
+
+            let background = '#ffffff';
+            if (isSelected) background = '#f5f3ff';
+            if (isHovered && !isSelected) background = '#f1f5f9';
+            if (isHovered && isSelected) background = '#ede9fe';
+
+            return (
+              <div
+                key={option.value}
+                style={{ ...optionStyle, background, color: option.color || '#1e293b', fontWeight: isSelected ? '600' : '400' }}
+                onClick={() => { onChange({ target: { value: option.value } }); setOpen(false); setHoveredValue(null); }}
+                onMouseEnter={() => setHoveredValue(option.value)}
+                onMouseLeave={() => setHoveredValue(null)}
+              >
+                <span style={{ width: '16px', marginRight: '6px', color: '#6366f1' }}>
+                  {isSelected ? '✓' : ''}
+                </span>
+                {option.label}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
   );
 };
 
-const wrapperStyle = {
-  position: 'relative',
-  width: '100%',
-  userSelect: 'none',
-  zIndex: 9999,
-};
-
-const triggerStyle = {
-  boxSizing: 'border-box',
-  width: '100%',
-  padding: '5px 8px',
-  borderRadius: '6px',
-  border: '1px solid #e2e8f0',
-  fontSize: '12px',
-  background: '#f8fafc',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  transition: 'border-color 0.15s ease',
-};
-
-const dropdownStyle = {
-  position: 'absolute',
-  top: 'calc(100% + 4px)',
-  left: 0,
-  right: 0,
-  background: '#ffffff',
-  border: '1px solid #e2e8f0',
-  borderRadius: '8px',
-  boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-  zIndex: 9999,
-  overflowY: 'auto',
-  maxHeight: '180px',
-};
-
-const optionStyle = {
-  padding: '8px 10px',
-  fontSize: '12px',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-};
+const wrapperStyle = { position: 'relative', width: '100%', userSelect: 'none', zIndex: 9999 };
+const triggerStyle = { boxSizing: 'border-box', width: '100%', padding: '5px 8px', borderRadius: '6px', border: '1px solid #e2e8f0', fontSize: '12px', background: '#f8fafc', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', transition: 'border-color 0.15s ease' };
+const dropdownStyle = { position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '8px', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', zIndex: 9999, overflowY: 'auto', maxHeight: '180px' };
+const optionStyle = { padding: '8px 10px', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', transition: 'background 0.1s ease' };

@@ -51,7 +51,7 @@ export const BaseNode = ({
       boxSizing: 'border-box',
     }}>
 
-      {/* Header */}
+      {/* Header — drags normally, no stopPropagation here */}
       <div style={{
         background: headerColor,
         color: '#ffffff',
@@ -108,15 +108,20 @@ export const BaseNode = ({
         <span style={badgeStyle}>{nodeLabel}</span>
       </div>
 
-      {/* Body */}
-      <div style={{
-        padding: '8px 12px 12px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '8px',
-        width: '100%',
-        boxSizing: 'border-box',
-      }}>
+      {/* Body — stopPropagation here so clicks/drags on interactive elements
+          don't get picked up by React Flow's node drag handler */}
+      <div
+        onMouseDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          padding: '8px 12px 12px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '8px',
+          width: '100%',
+          boxSizing: 'border-box',
+        }}
+      >
         {children}
       </div>
 

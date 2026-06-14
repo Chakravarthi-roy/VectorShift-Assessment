@@ -24,7 +24,7 @@ export const TimerNode = ({ id, data }) => {
   ];
 
   return (
-    <BaseNode id={id} title="Timer" icon={icon} description="Add a delay before the next step in the pipeline." handles={handles} headerColor="#0ea5e9">
+    <BaseNode id={id} title="Timer" icon={icon} description="Add a delay before the next step in the pipeline." handles={handles} headerColor="#1C2536">
       <label style={labelStyle}>
         Duration
         <input style={inputStyle} type="number" min="1" value={duration}
@@ -44,4 +44,4 @@ export const TimerNode = ({ id, data }) => {
 
 const labelStyle = { display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '12px', color: '#64748b', fontWeight: '500', width: '100%' };
 const inputStyle = { boxSizing: 'border-box', width: '100%', padding: '5px 8px', borderRadius: '6px', border: '1px solid #e2e8f0', fontSize: '12px', color: '#1e293b', background: '#f8fafc', outline: 'none' };
-const badgeStyle = { fontSize: '11px', color: '#0ea5e9', fontWeight: '600', textAlign: 'center', padding: '4px', borderTop: '1px solid #e2e8f0', marginTop: '2px' };
+const badgeStyle = { fontSize: '11px', color: '#1C2536', fontWeight: '600', textAlign: 'center', padding: '4px', borderTop: '1px solid #e2e8f0', marginTop: '2px' };

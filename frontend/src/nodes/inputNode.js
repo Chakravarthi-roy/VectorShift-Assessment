@@ -18,6 +18,9 @@ export const InputNode = ({ id, data }) => {
   const typeOptions = [
     { value: 'Text', label: 'Text' },
     { value: 'File', label: 'File' },
+    { value: 'Number', label: 'Number' },
+    { value: 'Boolean', label: 'Boolean' },
+    { value: 'JSON', label: 'JSON' },
   ];
 
   return (
